@@ -11,12 +11,14 @@ export const ticketSchema = z.object({
     .max(500, "Description must be less than 500 characters")
     .optional()
     .or(z.literal("")),
-  status: z.enum(["open", "in_progress", "closed"], {
-    errorMap: () => ({ message: "Status must be 'open', 'in_progress', or 'closed'" }),
-  }),
-  priority: z.enum(["low", "medium", "high"], {
-    errorMap: () => ({ message: "Priority must be 'low', 'medium', or 'high'" }),
-  }),
+  status: z.enum(["open", "in_progress", "closed"] as const)
+    .refine((val) => ["open", "in_progress", "closed"].includes(val), {
+      message: "Status must be 'open', 'in_progress', or 'closed'",
+    }),
+  priority: z.enum(["low", "medium", "high"] as const)
+    .refine((val) => ["low", "medium", "high"].includes(val), {
+      message: "Priority must be 'low', 'medium', or 'high'",
+    }),
   userId: z.string().min(1, "User ID is required"),
 });
 
