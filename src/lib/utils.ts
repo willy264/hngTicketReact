@@ -1,4 +1,10 @@
 import type { Ticket } from "./types";
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -7,27 +13,32 @@ const mockUsers = [
     id: "1",
     name: "Test User",
     email: "test@example.com",
-    password: "password123", 
+    password: "password123",
   },
 ];
 
-const loadTickets = (): Ticket[] => {
-  const savedTickets = localStorage.getItem('tickets');
-  if (savedTickets) {
-    return JSON.parse(savedTickets);
+const loadTickets = (userId: string): Ticket[] => {
+  const savedTickets = localStorage.getItem(`tickets_${userId}`);
+  return savedTickets ? JSON.parse(savedTickets) : [];
+};
+
+const saveTickets = (tickets: Ticket[], userId: string) => {
+  localStorage.setItem(`tickets_${userId}`, JSON.stringify(tickets));
+};
+
+let currentUserId: string | null = null;
+const userTickets: { [key: string]: Ticket[] } = {};
+
+export const setCurrentUser = (userId: string) => {
+  currentUserId = userId;
+  if (!userTickets[userId]) {
+    userTickets[userId] = loadTickets(userId);
   }
-  return [];
 };
-
-const saveTickets = (tickets: Ticket[]) => {
-  localStorage.setItem('tickets', JSON.stringify(tickets));
-};
-
-let mockTickets: Ticket[] = loadTickets();
 
 export const mockAuthApi = {
-  login: async (email: string, password: string) => { 
-    await delay(500); 
+  login: async (email: string, password: string) => {
+    await delay(500);
     const user = mockUsers.find(
       (u) => u.email === email && u.password === password
     );
@@ -50,7 +61,7 @@ export const mockAuthApi = {
       password,
     };
     mockUsers.push(newUser);
-    const { password: _, ...userWithoutPassword } = newUser; // 
+    const { password: _, ...userWithoutPassword } = newUser;
     return userWithoutPassword;
   },
 };
@@ -58,50 +69,77 @@ export const mockAuthApi = {
 export const mockTicketsApi = {
   list: async () => {
     await delay(500);
-    mockTickets = loadTickets();
-    return [...mockTickets];
+    if (!currentUserId) throw new Error("No user logged in");
+    if (!userTickets[currentUserId]) {
+      userTickets[currentUserId] = loadTickets(currentUserId);
+    }
+    return [...userTickets[currentUserId]];
   },
 
-  create: async (ticket: Omit<typeof mockTickets[0], "id">) => {
+  create: async (ticket: Omit<Ticket, "id">) => {
     await delay(500);
+    if (!currentUserId) throw new Error("No user logged in");
     const newTicket = {
       ...ticket,
       id: String(Date.now()),
+      userId: currentUserId,
     };
-    mockTickets.push(newTicket);
-    saveTickets(mockTickets);
+    if (!userTickets[currentUserId]) {
+      userTickets[currentUserId] = loadTickets(currentUserId);
+    }
+    userTickets[currentUserId].push(newTicket);
+    saveTickets(userTickets[currentUserId], currentUserId);
     return newTicket;
   },
 
-  update: async (id: string, updates: Partial<typeof mockTickets[0]>) => {
+  update: async (id: string, updates: Partial<Ticket>) => {
     await delay(500);
-    const index = mockTickets.findIndex((t) => t.id === id);
+    if (!currentUserId) throw new Error("No user logged in");
+    if (!userTickets[currentUserId]) {
+      userTickets[currentUserId] = loadTickets(currentUserId);
+    }
+    const index = userTickets[currentUserId].findIndex(
+      (t) => t.id === id && t.userId === currentUserId
+    );
     if (index === -1) {
       throw new Error("Ticket not found");
     }
-    mockTickets[index] = { ...mockTickets[index], ...updates };
-    saveTickets(mockTickets);
-    return mockTickets[index];
+    userTickets[currentUserId][index] = {
+      ...userTickets[currentUserId][index],
+      ...updates,
+    };
+    saveTickets(userTickets[currentUserId], currentUserId);
+    return userTickets[currentUserId][index];
   },
 
   delete: async (id: string) => {
     await delay(500);
-    const index = mockTickets.findIndex((t) => t.id === id);
+    if (!currentUserId) throw new Error("No user logged in");
+    if (!userTickets[currentUserId]) {
+      userTickets[currentUserId] = loadTickets(currentUserId);
+    }
+    const index = userTickets[currentUserId].findIndex(
+      (t) => t.id === id && t.userId === currentUserId
+    );
     if (index === -1) {
       throw new Error("Ticket not found");
     }
-    mockTickets.splice(index, 1); 
-    saveTickets(mockTickets);
+    userTickets[currentUserId].splice(index, 1);
+    saveTickets(userTickets[currentUserId], currentUserId);
   },
 
   getStats: async () => {
     await delay(200);
-    mockTickets = loadTickets();
+    if (!currentUserId) throw new Error("No user logged in");
+    if (!userTickets[currentUserId]) {
+      userTickets[currentUserId] = loadTickets(currentUserId);
+    }
+    const tickets = userTickets[currentUserId];
     return {
-      total: mockTickets.length,
-      open: mockTickets.filter(t => t.status === 'open').length,
-      inProgress: mockTickets.filter(t => t.status === 'in_progress').length,
-      closed: mockTickets.filter(t => t.status === 'closed').length,
+      total: tickets.length,
+      open: tickets.filter((t) => t.status === "open").length,
+      inProgress: tickets.filter((t) => t.status === "in_progress").length,
+      closed: tickets.filter((t) => t.status === "closed").length,
     };
-  }
+  },
 };
