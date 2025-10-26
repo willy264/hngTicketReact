@@ -1,6 +1,6 @@
-# Ticket Management System
+# ZenFlow
 
-A modern ticket management system built with React and TypeScript.
+A modern help desk solution for seamless ticket management. Built with React and TypeScript.
 
 ## Quick Start
 

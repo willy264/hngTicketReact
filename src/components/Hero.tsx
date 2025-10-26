@@ -5,12 +5,10 @@ import Button from "./ui/Button";
 const Hero = () => {
   return (
     <section className="relative min-h-screen overflow-hidden bg-linear-to-br from-gray-900 to-gray-800 text-white">
-      {/* Decorative Circles - Required by task */}
       <div className="absolute top-20 right-10 w-64 h-64 bg-blue-500/20 rounded-full blur-3xl animate-pulse"></div>
       <div className="absolute bottom-40 left-20 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl animate-pulse animation-delay-2000"></div>
       <div className="absolute top-1/2 right-1/3 w-48 h-48 bg-pink-500/15 rounded-full blur-2xl"></div>
 
-      {/* Animated background blobs */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute inset-0">
           <div className="absolute top-0 left-0 w-full h-full opacity-30">
@@ -22,8 +20,7 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 0 lg:-top-5">
+      <div className="relative z-10 lg:-top-5">
         <div className="container mx-auto px-4 py-12 sm:py-16 lg:py-32">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div className="text-center lg:text-left space-y-6 lg:space-y-8">
@@ -80,7 +77,7 @@ const Hero = () => {
               </div>
             </div>
 
-            {/* Mobile feature cards */}
+            {/* mobile */}
             <div className="lg:hidden space-y-4 mt-8">
               {[
                 {
@@ -123,9 +120,9 @@ const Hero = () => {
               ))}
             </div>
 
-            {/* Desktop feature cards */}
+            {/* desktop*/}
             <div className="hidden lg:block relative">
-              <div className="relative h-[600px]">
+              <div className="relative h-[400px]">
                 <div className="absolute top-0 right-0 w-80 p-6 bg-white/10 backdrop-blur-md rounded-2xl shadow-xl transform hover:-translate-y-2 transition-transform duration-300">
                   <div className="flex items-center gap-4">
                     <div className="p-3 bg-linear-to-br from-green-400 to-green-500 rounded-xl">
@@ -175,7 +172,6 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Enhanced Wavy SVG with multiple layers */}
       <div className="absolute -bottom-1 left-0 right-0">
         <svg
           className="w-full h-auto"
@@ -183,18 +179,16 @@ const Hero = () => {
           preserveAspectRatio="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          {/* Background wave layers for depth */}
           <path
-            className="fill-white/5"
+            className="fill-black/90"
             d="M0,96L48,112C96,128,192,160,288,170.7C384,181,480,171,576,154.7C672,139,768,117,864,122.7C960,128,1056,160,1152,165.3C1248,171,1344,149,1392,138.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
           />
           <path
-            className="fill-white/10"
+            className="fill-blue-900/10"
             d="M0,64L48,80C96,96,192,128,288,144C384,160,480,160,576,149.3C672,139,768,117,864,112C960,107,1056,117,1152,128C1248,139,1344,149,1392,154.7L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
           />
-          {/* Main wave */}
           <path
-            className="fill-white"
+            className="fill-gray-700/20"
             d="M0,32L48,37.3C96,43,192,53,288,80C384,107,480,149,576,144C672,139,768,85,864,74.7C960,64,1056,96,1152,106.7C1248,117,1344,107,1392,101.3L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
           />
         </svg>

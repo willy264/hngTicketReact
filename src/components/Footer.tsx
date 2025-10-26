@@ -1,7 +1,6 @@
 import { Ticket, Twitter, Github } from "lucide-react";
 
 const Footer = () => {
-
   return (
     <footer className="bg-gray-50 border-t border-gray-200">
       <div className="container mx-auto px-4 py-8 flex">
@@ -9,7 +8,7 @@ const Footer = () => {
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
               <Ticket className="w-6 h-6 text-blue-600" />
-              <span className="text-gray-900 font-semibold">TicketApp</span>
+              <span className="text-gray-900 font-semibold">ZenFlow</span>
             </div>
             <p className="text-gray-600 text-sm">
               Streamline your support workflow with our intuitive ticket
