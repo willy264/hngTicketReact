@@ -11,7 +11,7 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           <Link to="/" className="flex items-center space-x-2">
-            <File class="w-8 h-8 text-blue-600" />
+            <File className="w-8 h-8 text-blue-600" />
             <span className="text-xl font-bold text-gray-900">ZenFlow</span>
           </Link>
 
