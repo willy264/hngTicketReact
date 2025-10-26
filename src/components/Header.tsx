@@ -9,7 +9,7 @@ const Header = () => {
     <header className="bg-white border-b border-gray-200 shadow-sm">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
-          <Link to="/" className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2">
             <svg
               className="w-8 h-8 text-blue-600"
               fill="none"
@@ -24,7 +24,7 @@ const Header = () => {
               />
             </svg>
             <span className="text-xl font-bold text-gray-900">ZenFlow</span>
-          </Link>
+          </div>
 
           <nav className="flex items-center">
             {user ? (
